@@ -21,23 +21,15 @@
    },
    "outputs": [],
    "source": [
-    "# STATION IETR\n",
-    "#prefix = \"/home/pleroy/DATA/PoSAR-MC_PIMA_TEST#1\"\n",
-    "#sbg = prefix + \"/2017_07_13_SBG/dataLogger/session_0001/2017_07_13/log_11h00/sbgEComLogEventB.dat\"\n",
-    "#meb = prefix + \"/2017_07_13_13_23_55/2017_07_13_13_23_55_timeStamps.data\"\n",
-    "\n",
-    "# HP\n",
-    "prefix = \"/opt/DATA/PoSAR-MC_PIMA_TEST#1\"\n",
-    "sbg = prefix + \"/log_11h00/sbgEComLogEventB.dat\"\n",
+    "prefix = \"/home/pleroy/DATA/PoSAR-MC_PIMA_TEST#1\"\n",
+    "sbg = prefix + \"/2017_07_13_SBG/dataLogger/session_0001/2017_07_13/log_11h00/sbgEComLogEventB.dat\"\n",
     "meb = prefix + \"/2017_07_13_13_23_55/2017_07_13_13_23_55_timeStamps.data\""
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
-   "metadata": {
-    "collapsed": true
-   },
+   "execution_count": 5,
+   "metadata": {},
    "outputs": [],
    "source": [
     "sbg_eventB = np.loadtxt( sbg, skiprows = 1, usecols = (0,) )"
@@ -45,24 +37,31 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 16,
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<matplotlib.text.Text at 0x7f7b76c2a668>"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
    "source": [
-    "f1, (ax11, ax12) = plt.subplots( 2, 1, sharex = True )\n",
-    "\n",
-    "ax11.plot(sbg_eventB, '.b')\n",
-    "ax11.set_title('sbg_eventB')\n",
-    "ax11.grid('on')\n",
-    "\n",
-    "ax12.plot(np.diff(sbg_eventB), '.b')\n",
-    "ax12.set_title('np.diff(sbg_eventB)')\n",
-    "ax12.grid('on')"
+    "f, (ax1, ax2) = plt.subplots(2, 1, sharex = True)\n",
+    "ax1.plot(sbg_eventB, '.b')\n",
+    "ax1.set_title('sbg_eventB')\n",
+    "ax2.plot(np.diff(sbg_eventB), '.b')\n",
+    "ax2.set_title('np.diff(sbg_eventB)')"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 8,
    "metadata": {
     "collapsed": true
    },
@@ -73,38 +72,43 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 9,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<matplotlib.text.Text at 0x7f0ae43797f0>"
+       "[<matplotlib.lines.Line2D at 0x7f7b77f98860>]"
       ]
      },
-     "execution_count": 7,
+     "execution_count": 9,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
-    "plt.plot( meb_timeStamp, '.g' )\n",
-    "f2, (ax21, ax22) = plt.subplots( 2, 1, sharex = True )\n",
-    "\n",
-    "ax21.plot(meb_timeStamp, '.g')\n",
-    "ax21.set_title('meb_timeStamp')\n",
-    "ax21.grid('on')\n",
-    "\n",
-    "ax22.plot(np.diff(meb_timeStamp), '.b')\n",
-    "ax22.set_title('np.diff(meb_timeStamp)')\n",
-    "ax22.grid('on')"
+    "plt.plot( meb_timeStamp, '.g' )"
    ]
   },
   {
-   "cell_type": "markdown",
+   "cell_type": "code",
+   "execution_count": 11,
    "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[<matplotlib.lines.Line2D at 0x7f7b77f19b00>]"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
    "source": [
-    "Comparaison des timestamps enregistrés dans la centrale et ceux utilisés par le radar pour dater les blocs de données. "
+    "plt.plot( meb_timeStamp, meb_timeStamp, 'oy' )\n",
+    "plt.plot( sbg_eventB, sbg_eventB, '.b' )"
    ]
   },
   {
@@ -115,31 +119,10 @@
     {
      "data": {
       "text/plain": [
-       "[<matplotlib.lines.Line2D at 0x7f0ae43446a0>]"
+       "[<matplotlib.lines.Line2D at 0x7f7b76ac7fd0>]"
       ]
      },
      "execution_count": 12,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "plt.plot( sbg_eventB, sbg_eventB, '.b' )\n",
-    "plt.plot( meb_timeStamp, meb_timeStamp, 'or' )"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 39,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "[<matplotlib.lines.Line2D at 0x7fc0a4b663c8>]"
-      ]
-     },
-     "execution_count": 39,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -150,40 +133,18 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": null,
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "(249,)"
-      ]
-     },
-     "execution_count": 26,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
     "np.diff(meb_blockNumber).shape"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 35,
+   "execution_count": null,
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "(249,)"
-      ]
-     },
-     "execution_count": 35,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
     "meb_blockNumber[:-1].shape"
    ]
