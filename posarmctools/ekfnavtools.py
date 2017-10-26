@@ -39,9 +39,32 @@ runaway = np.array([ [ 48.057546, -2.010483, 0.0 ],
 	[ 48.057546, -2.010483, 0.0 ]
 	])
 
+hangar = np.array([ [ 48.056814, -2.007998, 0.0 ],
+          [ 48.056822, -2.007793, 0.0 ],
+          [ 48.056688, -2.007777, 0.0 ],
+          [ 48.056679, -2.007978, 0.0 ],
+          [ 48.056814, -2.007998, 0.0 ]
+          ])
+
+building = np.array([ [ 48.056830, -2.007717, 0.0 ],
+          [ 48.056852, -2.007300, 0.0 ],
+          [ 48.056771, -2.007296, 0.0 ],
+          [ 48.056754, -2.007706, 0.0 ],
+          [ 48.056830, -2.007717, 0.0 ]
+          ])
+
+cornerReflectorLarge = np.array( [48.057226, -2.008023, 0.0] )
+
+cornerReflectorSmall = np.array( [48.057398, -2.008122, 0.0] )
+
 def plotRunaway( ax ):
     ax.plot(runaway[:,1], runaway[:,0], "og", markeredgecolor = 'black')
 
+def plotHangar( ax ):
+    ax.plot(hangar[:,1], hangar[:,0], "og", markeredgecolor = 'black')
+
+def plotBuilding( ax ):
+    ax.plot(building[:,1], building[:,0], "og", markeredgecolor = 'black')
 
 def plotLongLatAndTrackReferences( ax, Long, Lat ):
     ax.plot( Long, Lat, 'gray' )
@@ -102,10 +125,10 @@ def getLastLine( filename ):
             last = next(reader)
         print(last)
 
-def printUtc( index ):
-    print( str(utc_h[index]) 
-          + " : " + str(utc_m[index]) 
-          + " : " + "{:.3f}".format(utc_s[index] + utc_nano[index] * 1e-9) )
+def printUtc( index, utc ):
+    print( str(utc[index][1]) 
+          + " : " + str(utc[index][2]) 
+          + " : " + "{:.3f}".format(utc[index][3] + utc[index][4] * 1e-9) )
 
 def getDataAtIndex(filename, index):
     with open(filename, newline='') as f:
