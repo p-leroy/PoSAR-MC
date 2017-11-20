@@ -28,12 +28,8 @@ def getxy( Lat, Long, orig ):
 
     return x, y
 
-def getlatlong( x, y, orig )
-
-    #Long = 
-    #Lat = 
-
-    return Lat, Long
+def getlatlong( x, y, orig ):
+	pass
 
 def getProjection( coord, proj, startingPoint, trackModel ):
 	if len( coord.shape ) == 1:
