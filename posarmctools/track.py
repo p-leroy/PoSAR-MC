@@ -21,12 +21,19 @@ def func(x, a, b):
 #startingPoint = ( 48.059200, -2.004171, 0.0 )
 # (latitude, longitude, altitude)
 
-def getxy( lat, long, orig ):
+def getxy( Lat, Long, orig ):
 
-    x = R * ( (long-orig[1]) * np.pi / 180 ) * np.cos( orig[0] * np.pi / 180 )
-    y = R * ( (lat-orig[0]) * np.pi / 180)
+    x = R * ( (Long-orig[1]) * np.pi / 180 ) * np.cos( orig[0] * np.pi / 180 )
+    y = R * ( (Lat-orig[0]) * np.pi / 180)
 
     return x, y
+
+def getlatlong( x, y, orig )
+
+    #Long = 
+    #Lat = 
+
+    return Lat, Long
 
 def getProjection( coord, proj, startingPoint, trackModel ):
 	if len( coord.shape ) == 1:
