@@ -6,7 +6,6 @@ CONFIG -= qt
 SOURCES += \
     ../backprojection/backprojection.c
 
-#LIBS += -lfftw3_threads -lfftw3 -lm -lpthread
 LIBS += -lfftw3
 
 HEADERS += \
@@ -15,3 +14,6 @@ HEADERS += \
 INCLUDEPATH += ../backprojection
 
 QMAKE_CFLAGS += -O3
+QMAKE_CFLAGS += -fopenmp
+
+QMAKE_LFLAGS += -fopenmp

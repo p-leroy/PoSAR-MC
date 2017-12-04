@@ -10,3 +10,6 @@ HEADERS += \
     backprojection.h
 
 LIBS += -lfftw3
+
+QMAKE_CFLAGS += -fopenmp
+QMAKE_LFLAGS += -fopenmp
