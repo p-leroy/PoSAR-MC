@@ -2,3 +2,6 @@ syntax: glob
 .npy
 *.npy
 *.pyc
+*.o
+*.so
+*.so.*
