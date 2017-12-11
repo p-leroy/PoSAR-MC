@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include<backprojection.h>
 
@@ -8,16 +9,25 @@
 #define DAZ 0.1
 #define N_X 10
 #define N_R 5
-#define N_AZ 1
+#define N_AZ 10
+#define N_F 1500
+#define N_OVER 15000
+#define H_SCENE 90
 
-int main(int argc, char *argv[])
+int main(void)
 {
     printf("Hello World!\n");
 
-    double vec_az[N_AZ];
-    double vec_x[N_X];
-    double vec_r[N_R];
-    complex img[N_X][N_R];
+    int complexSize;
+
+    complexSize = sizeof(double) * 2;
+
+    double *vec_x = malloc( N_X * sizeof(double) );
+    double *vec_r = malloc( N_R * sizeof(double) );
+    double *r_over = malloc( N_OVER * sizeof(double) );
+    complex *sr = malloc( N_AZ * N_F * complexSize );
+    MyPosition *positions = malloc( N_AZ * sizeof(MyPosition) );
+    complex *img = malloc( N_X * N_R * complexSize );
 
     // initialize vec_x
     for(int k=0; k<N_X; k++)
@@ -31,25 +41,30 @@ int main(int argc, char *argv[])
         vec_r[k] = k * DR;
     }
 
-    // initialize vec_az
-    for(int k=0; k<N_AZ; k++)
-    {
-        vec_az[k] = k * DAZ;
-    }
-
     // initialize img
     for(int x=0; x<N_X; x++)
     {
         for(int r=0; r<N_R; r++)
         {
-            img[x][r] = 0;
+            img[x*N_R+r] = 0;
         }
     }
 
-    //backProjection(float *vec_x, int Nx, float *vec_r, int Nr, float *vec_az, int Naz, complex **out )
-    backProjection( vec_x, N_X, vec_r, N_R, vec_az, N_AZ, img );
+    printf("sizeof(complex) = %d\n", complexSize);
 
-    printf( "%f, %f\n", creal(img[0][0]), cimag(img[0][0]) );
+    backProjectionOmpGroundRange(vec_x, N_X,
+                                 vec_r, N_R,
+                                 r_over, N_OVER, DX,
+                                 sr, N_AZ, N_F,
+                                 positions, img,
+                                 H_SCENE);
+
+    free(vec_x);
+    free(vec_r);
+    free(r_over);
+    free(sr);
+    free(positions);
+    free(img);
 
     return 0;
 }

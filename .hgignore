@@ -5,3 +5,12 @@ syntax: glob
 *.o
 *.so
 *.so.*
+*.gcda
+*.gcno
+backprojection/ccpp/backprojection/out
+*callgrind.out*
+backprojection/ccpp/backprojection/coverage.info
+backprojection/ccpp/backprojection/vgcore.12747
+backprojection/ccpp/backprojection/output.xml
+backprojection/ccpp/backprojection/output.html
+backprojection/ccpp/backprojection/fftw3Plans
