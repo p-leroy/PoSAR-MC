@@ -10,7 +10,7 @@ class MyComplex(Structure):
 class MyParameters(Structure):
     _fields_ = [
     ('Nx', c_int),
-    ('Nr', c_int),
+    ('Ny', c_int),
     ('Nover', c_int),
     ('dx', c_double),
     ('Naz', c_int),
@@ -48,15 +48,6 @@ class LibBackProjection(object):
 
     # backProjectionOmpGroundRange
     self.so.backProjectionOmpGroundRange.argtypes = [
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int, c_double,
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'), c_int, c_int,
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
-    c_double ]
-
-    # call_backProjectionOmpGroundRange
-    self.so.call_backProjectionOmpGroundRange.argtypes = [
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
@@ -66,21 +57,12 @@ class LibBackProjection(object):
 
     # backProjectionOmpGroundRangeb
     self.so.backProjectionOmpGroundRangeb.argtypes = [
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int, c_double,
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'), c_int, c_int,
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
-    c_double ]
-
-    # backProjectionOmpGroundRange_v2
-    self.so.backProjectionOmpGroundRange_v2.argtypes = [
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int, c_double,
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'), c_int, c_int,
-    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
-    c_double ]
+    MyParameters ]
 
     # measureAndSavePlans
     self.so.measureAndSavePlans.argtypes = [
@@ -109,16 +91,16 @@ class LibBackProjection(object):
     ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     c_int ]
 
-    # resample4
-    self.so.resample4.argtypes = [
+    # zeroPaddingAndIfft4
+    self.so.zeroPaddingAndIfft4.argtypes = [
     ctypeslib.ndpointer(complex, ndim=1, flags='C'), 
     c_int,
     ctypeslib.ndpointer(complex, ndim=1, flags='C'), 
     ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     c_int ]
 
-    # resample4b
-    self.so.resample4b.argtypes = [
+    # zeroPaddingAndIfft4b
+    self.so.zeroPaddingAndIfft4b.argtypes = [
     ctypeslib.ndpointer(complex, ndim=1, flags='C'), 
     c_int,
     ctypeslib.ndpointer(complex, ndim=1, flags='C'), 

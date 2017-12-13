@@ -21,6 +21,11 @@ def sb1( t, r, alpha, fc ):
             * np.exp(  -1j * 2 * np.pi * alpha * t * tau )
     return y
 
+def sb1_r( t, r, alpha, fc ):
+    tau = 2 * r / c
+    y = np.cos( -2  * np.pi * fc * tau + np.pi * alpha * tau**2 -2 * np.pi * alpha * t * tau )
+    return y
+
 def sb2( t, r, alpha, fc, T ):
     y = np.zeros( t.shape, dtype=complex )
     tau = 2 * r / c
