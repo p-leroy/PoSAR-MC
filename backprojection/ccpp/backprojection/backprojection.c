@@ -304,6 +304,7 @@ int backProjectionOmpGroundRange(double* vec_x,
     printf( "dx = %f, kc = %.12f\n", dx, KC );
     printf( "Nover = %d\n", Nover );
     printf( "d_min = %.2f, dmax = %.2f\n\n", r_over[0], r_over[Nover-1] );
+    printf( "Very first run may be long due to the fftw plan calculation.\n\n");
 
     stepsPerThread = Naz / numThreads;
     progressStep = stepsPerThread / PROGRESS_STEP;
@@ -605,7 +606,6 @@ int zeroPaddingAndIfft( fftw_plan py,
     for (k=Nx/2; k<Nx; k++)
     {
         ffty[k+Ny-Nx] = fftx[k];
-
     }
 
     fftw_execute(py);
