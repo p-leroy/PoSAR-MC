@@ -7,6 +7,8 @@ syntax: glob
 *.so.*
 *.gcda
 *.gcno
+*moc_*
+*.png
 backprojection/ccpp/backprojection/out
 *callgrind.out*
 backprojection/ccpp/backprojection/coverage.info

@@ -387,6 +387,273 @@ int backProjectionOmpGroundRange(double* vec_x,
     return ret;
 }
 
+int backProjectionOmpGroundRange_LETG(double* vec_x,
+                                      double* vec_y,
+                                      double* vec_z,
+                                      double* r_over,
+                                      complex* sr,
+                                      MyPosition *myPosition, complex *img,
+                                      MyParameters_LETG params)
+{
+    int ret=0;
+    int naz;
+    int k;
+    int maxThreads;
+    int numThreads;
+    double steps_completed = 0.;
+    double progressLevel = 0.;
+    double progressStep;
+    double stepsPerThread;
+    double sin_phi2;
+    double cos_phi2;
+    double phi_max;
+
+    int Nx = params.Nx;
+    int Ny = params.Ny;
+    int Nover = params.Nover;
+    double dx = params.dx;
+    int Naz = params.Naz;
+    int Nf = params.Nf;
+    double hScene = params.hScene;
+    double phi_a_deg = params.phi_a_deg;
+
+    sin_phi2 = sin( phi_a_deg / 2. * M_PI / 180. );
+    cos_phi2 = cos( phi_a_deg / 2. * M_PI / 180. );
+    phi_max = phi_a_deg / 2. * M_PI / 180.;
+
+    maxThreads = omp_get_max_threads();
+    numThreads = maxThreads / 2;
+    if (numThreads==0)
+        numThreads = 1;
+    printf("\n\n\n**************\nBACKPROJECTION\n\n");
+    printf( "maxThreads = %d, numThreads = %d\n", maxThreads, numThreads );
+    printf( "dx = %f, kc = %.12f\n", dx, KC );
+    printf( "Nover = %d\n", Nover );
+    printf( "d_min = %.2f, dmax = %.2f\n\n", r_over[0], r_over[Nover-1] );
+    printf( "Very first run may be long due to the fftw plan calculation.\n\n");
+
+    stepsPerThread = Naz / numThreads;
+    progressStep = stepsPerThread / PROGRESS_STEP;
+
+    complex *y = fftw_alloc_complex( numThreads * Nover );
+    complex *ffty = fftw_alloc_complex( numThreads * Nover );
+    fftw_plan py[numThreads];
+
+    for (k=0; k<numThreads; k++)
+        py[k] = fftw_plan_dft_1d(Nover, &ffty[k*Nover], &y[k*Nover], FFTW_BACKWARD, FFTW_MEASURE);
+
+    if (Nf%2!=0)
+        printf("warning, Nx should be a multiple of 2\n");
+
+#pragma omp parallel num_threads( numThreads )
+    {
+        double xa;
+        double ya;
+        double za;
+        int n;
+        double d = 0.;
+        double phi_az;
+        double phi_s;
+        double phi_a;
+        double dxa;
+        double dya;
+        double dza;
+        double valSin;
+        double valCos;
+        complex aux1;
+        complex aux2;
+        complex aux4;
+        int tid;
+#pragma omp for schedule(dynamic)
+        for (naz=0; naz<Naz; naz++)
+        {
+            tid = omp_get_thread_num();
+            xa = myPosition[naz].x;
+            ya = myPosition[naz].y;
+            za = myPosition[naz].z;
+
+            zeroPaddingAndIfft( py[tid], &sr[naz*Nf], Nf, &ffty[tid*Nover], Nover);
+
+            for (n=0; n<(Nx*Ny); n++)
+            {
+                dxa = pow(xa-vec_x[n], 2.);
+                dya = pow(ya-vec_y[n], 2.);
+                dza = pow(za-vec_z[n], 2.);
+                d = sqrt( dxa + dya + dza );
+//                valSin = fabs( (xa-vec_x[n]) / d );
+                valCos = abs( ( (vec_x[n] - xa) * params.uxx + (vec_y[n] - ya) * params.uxy ) ) / d;
+                phi_s = acos(valCos);
+                phi_a = M_PI/2 - phi_s;
+//                if ( (valSin < sin_phi2) && (d >= r_over[0]) && (d <= r_over[Nover-1]) )
+                if ( (phi_a < phi_max) && (d >= r_over[0]) && (d <= r_over[Nover-1]) )
+                {
+                    aux1 = cexp( I * KC * d );
+                    aux2 = interp( d, r_over, &y[tid*Nover], dx);
+                    aux4 = aux1 * aux2;
+#pragma omp critical
+                    img[n] += aux4;
+                }
+            }
+
+            if (tid == 0)
+            {
+                steps_completed++;
+                if (steps_completed > progressLevel)
+                {
+                    dxa = pow(xa-params.meanX, 2.);
+                    dya = pow(ya-params.meanY, 2.);
+                    dza = pow(za-hScene, 2.);
+                    d = sqrt( dxa + dya + dza );
+                    valCos = abs( ( (params.meanX - xa) * params.uxx + (params.meanY - ya) * params.uxy ) ) / d;
+                    phi_s = acos(valCos) * 180 / M_PI;
+                    phi_a = 90 - phi_s;
+                    printf( "%.0f%% \n", steps_completed / stepsPerThread * 100 );
+                    progressLevel = progressLevel + progressStep;
+                    printf("naz = %d (%.2f, %.2f, %.2f) d = %.2f, phi_s = %.2f, phi_a = %.2f\n", naz, xa, ya, za, d, phi_s, phi_a);
+                }
+            }
+        }
+    }
+
+    printf( "100%%\n" );
+
+    fftw_free( y );
+    fftw_free( ffty );
+
+    ret = fftw_export_wisdom_to_filename(PLANS_FILENAME);
+
+    return ret;
+}
+
+int backProjectionOmpGroundRange_NED(double* vec_x,
+                                     double* vec_r,
+                                     double* r_over,
+                                     complex* sr,
+                                     MyPosition *myPosition, complex *img,
+                                     MyParameters params,
+                                     MyHeading *myHeading)
+{
+    int ret=0;
+    int naz;
+    int k;
+    int maxThreads;
+    int numThreads;
+    double steps_completed = 0.;
+    double progressLevel = 0.;
+    double progressStep;
+    double stepsPerThread;
+    double sin_phi2;
+
+    int Nx = params.Nx;
+    int Ny = params.Ny;
+    int Nover = params.Nover;
+    double dx = params.dx;
+    int Naz = params.Naz;
+    int Nf = params.Nf;
+    double hScene = params.hScene;
+    double phi_a_deg = params.phi_a_deg;
+
+    sin_phi2 = sin( phi_a_deg / 2. * M_PI / 180. );
+
+    maxThreads = omp_get_max_threads();
+    numThreads = maxThreads / 2;
+    if (numThreads==0)
+        numThreads = 1;
+    printf("\n\n\n**************\nBACKPROJECTION\n\n");
+    printf( "maxThreads = %d, numThreads = %d\n", maxThreads, numThreads );
+    printf( "dx = %f, kc = %.12f\n", dx, KC );
+    printf( "Nover = %d\n", Nover );
+    printf( "d_min = %.2f, dmax = %.2f\n\n", r_over[0], r_over[Nover-1] );
+    printf( "Very first run may be long due to the fftw plan calculation.\n\n");
+
+    stepsPerThread = Naz / numThreads;
+    progressStep = stepsPerThread / PROGRESS_STEP;
+
+    complex *y = fftw_alloc_complex( numThreads * Nover );
+    complex *ffty = fftw_alloc_complex( numThreads * Nover );
+    fftw_plan py[numThreads];
+
+    for (k=0; k<numThreads; k++)
+        py[k] = fftw_plan_dft_1d(Nover, &ffty[k*Nover], &y[k*Nover], FFTW_BACKWARD, FFTW_MEASURE);
+
+    if (Nf%2!=0)
+        printf("warning, Nx should be a multiple of 2\n");
+
+#pragma omp parallel num_threads( numThreads )
+    {
+        double xa;
+        double ya;
+        double za;
+        int xn;
+        int rn;
+        double d = 0.;
+        double dxa;
+        double dza;
+        double valSin;
+        double scalarProduct;
+        double scal1;
+        complex aux1;
+        complex aux2;
+        complex aux4;
+        int tid;
+#pragma omp for schedule(dynamic)
+        for (naz=0; naz<Naz; naz++)
+        {
+            tid = omp_get_thread_num();
+            xa = myPosition[naz].x;
+            ya = myPosition[naz].y;
+            za = myPosition[naz].z;
+
+            zeroPaddingAndIfft( py[tid], &sr[naz*Nf], Nf, &ffty[tid*Nover], Nover);
+
+            dza = pow(za-hScene, 2.);
+
+            for (xn=0; xn<Nx; xn++)
+            {
+                dxa = pow(xa-vec_x[xn], 2.);
+                scal1 = (xa-vec_x[xn]) * myHeading[naz].cos;
+                for (rn=0; rn<Ny; rn++)
+                {
+                    d = sqrt( dxa + pow(ya-vec_r[rn], 2.) + dza );
+//                    valSin = fabs( (xa-vec_x[xn]) / d );
+                    // COMPUTE THE SCALAR PRODUCT, ASSUMPTION: THE PLANE IS HORIZONTAL
+                    scalarProduct = scal1
+                            + ((ya-vec_r[rn]) * myHeading[naz].sin);
+                    valSin = fabs( sin( M_PI / 2. - acos( scalarProduct / d ) ) );
+                    if ( (valSin < sin_phi2) && (d >= r_over[0]) && (d <= r_over[Nover-1]) )
+                    {
+                        aux1 = cexp( I * KC * d );
+                        aux2 = interp( d, r_over, &y[tid*Nover], dx);
+                        aux4 = aux1 * aux2;
+#pragma omp critical
+                        img[xn * Ny + rn] += aux4;
+                    }
+                }
+            }
+
+            if (tid == 0)
+            {
+                steps_completed++;
+                if (steps_completed > progressLevel)
+                {
+                    printf( "%.0f%% \n", steps_completed / stepsPerThread * 100 );
+                    progressLevel = progressLevel + progressStep;
+                    printf("naz = %d (%.2f, %.2f, %.2f) d = %.2f\n", naz, xa, ya, za, d);
+                }
+            }
+        }
+    }
+
+    printf( "100%%\n" );
+
+    fftw_free( y );
+    fftw_free( ffty );
+
+    ret = fftw_export_wisdom_to_filename(PLANS_FILENAME);
+
+    return ret;
+}
+
 // back projection with lff zero padding
 int backProjectionOmpGroundRangeb(double* vec_x,
                                   double* vec_r,

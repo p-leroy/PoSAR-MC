@@ -18,6 +18,21 @@ class MyParameters(Structure):
     ('hScene', c_double),
     ('phi_a_deg', c_double) ]
 
+class MyParameters_LETG(Structure):
+    _fields_ = [
+    ('Nx', c_int),
+    ('Ny', c_int),
+    ('Nover', c_int),
+    ('dx', c_double),
+    ('Naz', c_int),
+    ('Nf', c_int),
+    ('hScene', c_double),
+    ('phi_a_deg', c_double),
+    ('uxx', c_double),
+    ('uxy', c_double),
+    ('meanX', c_double),
+    ('meanY', c_double) ]
+
 class LibBackProjection(object):
   """docstring for LibBackProjection"""
   def __init__(self, filename):
@@ -54,6 +69,26 @@ class LibBackProjection(object):
     ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     MyParameters ]
+
+    # backProjectionOmpGroundRange_LETG
+    self.so.backProjectionOmpGroundRange_LETG.argtypes = [
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # x
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # y
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # z
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    MyParameters_LETG ]
+
+    # backProjectionOmpGroundRange_NED
+    self.so.backProjectionOmpGroundRange_NED.argtypes = [
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    MyParameters,
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C') ]
 
     # backProjectionOmpGroundRangeb
     self.so.backProjectionOmpGroundRangeb.argtypes = [

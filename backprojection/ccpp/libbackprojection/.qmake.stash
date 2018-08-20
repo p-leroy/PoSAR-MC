@@ -1,23 +1,4 @@
-QMAKE_DEFAULT_INCDIRS = \
-    /usr/include/c++/7 \
-    /usr/include/c++/7/x86_64-redhat-linux \
-    /usr/include/c++/7/backward \
-    /usr/lib/gcc/x86_64-redhat-linux/7/include \
-    /usr/local/include \
-    /usr/include
-QMAKE_DEFAULT_LIBDIRS = \
-    /usr/lib/gcc/x86_64-redhat-linux/7 \
-    /usr/lib64 \
-    /lib64 \
-    /usr/lib \
-    /lib
 QMAKE_CXX.INCDIRS = \
-    /usr/include/c++/7 \
-    /usr/include/c++/7/x86_64-redhat-linux \
-    /usr/include/c++/7/backward \
-    /usr/lib/gcc/x86_64-redhat-linux/7/include \
-    /usr/local/include \
-    /usr/include \
     /usr/include/c++/7 \
     /usr/include/c++/7/x86_64-redhat-linux \
     /usr/include/c++/7/backward \
@@ -32,7 +13,7 @@ QMAKE_CXX.LIBDIRS = \
     /lib
 QMAKE_CXX.QT_COMPILER_STDCXX = 201402L
 QMAKE_CXX.QMAKE_GCC_MAJOR_VERSION = 7
-QMAKE_CXX.QMAKE_GCC_MINOR_VERSION = 2
+QMAKE_CXX.QMAKE_GCC_MINOR_VERSION = 3
 QMAKE_CXX.QMAKE_GCC_PATCH_VERSION = 1
 QMAKE_CXX.COMPILER_MACROS = \
     QT_COMPILER_STDCXX \

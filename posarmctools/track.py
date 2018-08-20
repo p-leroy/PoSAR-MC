@@ -1,7 +1,7 @@
 from scipy.optimize import curve_fit
 import numpy as np
 
-R = 6378137  # approximate radius of earth
+R = 6378137  # approximate radius of earth // demi grand axe World - Geodetic System WGS84
 
 #startingPoint = ( 48.058403, -2.005964, 0.0 ) # top right hand corner of the runaway
 startingPoint = ( 48 + 3 / 60 + 33.14 / 3600, 
@@ -25,6 +25,13 @@ def getxy( Lat, Long, orig ):
 
     x = R * ( (Long-orig[1]) * np.pi / 180 ) * np.cos( orig[0] * np.pi / 180 )
     y = R * ( (Lat-orig[0]) * np.pi / 180)
+
+    return x, y
+
+def getxy_NED( Lat, Long, orig ):
+
+    x = R * ( (Lat-orig[0]) * np.pi / 180)
+    y = R * ( (Long-orig[1]) * np.pi / 180 ) * np.cos( orig[0] * np.pi / 180 )
 
     return x, y
 

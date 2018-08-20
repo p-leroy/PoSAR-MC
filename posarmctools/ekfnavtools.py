@@ -53,6 +53,11 @@ building = np.array([ [ 48.056830, -2.007717, 0.0 ],
           [ 48.056830, -2.007717, 0.0 ]
           ])
 
+church = np.array( [48.066103, -1.978348, 82.27] )
+
+monterfil_top_right = np.array([ 48.069233, -1.975694, 0.0 ])
+monterfil_bottom_left = np.array([ 48.066013, -1.986860, 0.0 ])
+
 cornerReflectorLarge = np.array( [48.057226, -2.008023, 0.0] )
 
 cornerReflectorSmall = np.array( [48.057398, -2.008122, 0.0] )

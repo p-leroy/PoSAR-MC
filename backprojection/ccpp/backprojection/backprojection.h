@@ -17,6 +17,13 @@ typedef struct{
 } MyPosition;
 
 typedef struct{
+    double rampNumber;
+    double timeStamp;
+    double cos;
+    double sin;
+} MyHeading;
+
+typedef struct{
     int Nx;
     int Ny;
     int Nover;
@@ -26,6 +33,21 @@ typedef struct{
     double hScene;
     double phi_a_deg;
 } MyParameters;
+
+typedef struct{
+    int Nx;
+    int Ny;
+    int Nover;
+    double dx;
+    int Naz;
+    int Nf;
+    double hScene;
+    double phi_a_deg;
+    double uxx;
+    double uxy;
+    double meanX;
+    double meanY;
+} MyParameters_LETG;
 
 int backProjection(double *vec_x, int Nx,
                    double *vec_r, int Nr,
@@ -60,6 +82,20 @@ int backProjectionOmpGroundRange(double* vec_x,
                                  complex* sr,
                                  MyPosition *myPosition, complex *img,
                                  MyParameters params);
+int backProjectionOmpGroundRange_LETG(double* vec_x,
+                                      double* vec_y,
+                                      double *vec_z,
+                                      double* r_over,
+                                      complex* sr,
+                                      MyPosition *myPosition, complex *img,
+                                      MyParameters_LETG params);
+int backProjectionOmpGroundRange_NED(double* vec_x,
+                                     double* vec_r,
+                                     double* r_over,
+                                     complex* sr,
+                                     MyPosition *myPosition, complex *img,
+                                     MyParameters params,
+                                     MyHeading *myCourse);
 int backProjectionOmpGroundRangeb(double* vec_x,
                                   double* vec_r,
                                   double* r_over,
