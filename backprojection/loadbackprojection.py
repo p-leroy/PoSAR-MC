@@ -61,6 +61,15 @@ class LibBackProjection(object):
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(complex, ndim=1, flags='C') ]
 
+    # backProjectionOmpSlantRange
+    self.so.backProjectionOmpSlantRange.argtypes = [
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    MyParameters ]
+
     # backProjectionOmpGroundRange
     self.so.backProjectionOmpGroundRange.argtypes = [
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),

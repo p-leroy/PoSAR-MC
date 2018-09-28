@@ -70,8 +70,8 @@ int backProjection2(double *vec_x, int Nx,
                     complex *srf, int Naz, int Nf,
                     double *vec_az, complex* img);
 
-int backProjectionOmpSlantRange(double* vec_x,
-                                double* vec_r,
+int backProjectionOmpSlantRange(double* vec_az,
+                                double* vec_rg,
                                 double* r_over,
                                 complex* sr,
                                 MyPosition *myPosition, complex *img,
