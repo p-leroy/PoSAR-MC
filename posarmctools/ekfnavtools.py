@@ -53,6 +53,15 @@ building = np.array([ [ 48.056830, -2.007717, 0.0 ],
           [ 48.056830, -2.007717, 0.0 ]
           ])
 
+concreteBlocks = np.array([
+    [48.058067999622324,-2.0065217857185120,0.0],
+    [48.057944804557310,-2.0071700279455684,0.0],
+    [48.057820013472934,-2.0078100100003486,0.0],
+    [48.057696817814474,-2.0084613762863315,0.0],
+    [48.057576395106054,-2.0090977078737673,0.0],
+    [48.057453198864690,-2.0097521982186746,0.0]
+    ])
+
 church = np.array( [48.066103, -1.978348, 82.27] )
 
 monterfil_top_right = np.array([ 48.069233, -1.975694, 0.0 ])
@@ -64,6 +73,9 @@ cornerReflectorSmall = np.array( [48.057398, -2.008122, 0.0] )
 
 def plotRunaway( ax ):
     ax.plot(runaway[:,1], runaway[:,0], "og", markeredgecolor = 'black')
+
+def plotConcreteBlocks( ax ):
+    ax.plot(concreteBlocks[:,1], concreteBlocks[:,0], "ow", markeredgecolor = 'black')    
 
 def plotHangar( ax ):
     ax.plot(hangar[:,1], hangar[:,0], "og", markeredgecolor = 'black')
