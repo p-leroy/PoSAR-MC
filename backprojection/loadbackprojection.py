@@ -18,6 +18,18 @@ class MyParameters(Structure):
     ('hScene', c_double),
     ('phi_a_deg', c_double) ]
 
+class MyParametersPoSAR_GB(Structure):
+    _fields_ = [
+    ('Nx', c_int),
+    ('Ny', c_int),
+    ('Nz', c_int),
+    ('Nover', c_int),
+    ('dx', c_double),
+    ('Naz', c_int),
+    ('Nf', c_int),
+    ('phi_a_deg', c_double),
+    ('kc', c_double) ]
+
 class MyParameters_LETG(Structure):
     _fields_ = [
     ('Nx', c_int),
@@ -48,25 +60,25 @@ class LibBackProjection(object):
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int, c_double,
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'), c_int, c_int,
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'), c_int, c_int,
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
-    ctypeslib.ndpointer(complex, ndim=1, flags='C') ]
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C') ]
 
     # backProjectionOmp
     self.so.backProjectionOmp.argtypes = [
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int,
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), c_int, c_double,
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'), c_int, c_int,
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'), c_int, c_int,
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
-    ctypeslib.ndpointer(complex, ndim=1, flags='C') ]
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C') ]
 
     # backProjectionOmpSlantRange
     self.so.backProjectionOmpSlantRange.argtypes = [
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     MyParameters ]
 
@@ -75,7 +87,7 @@ class LibBackProjection(object):
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     MyParameters ]
 
@@ -85,16 +97,48 @@ class LibBackProjection(object):
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # y
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # z
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     MyParameters_LETG ]
+
+    # backProjectionOmpGroundRange_PoSAR_GB
+    self.so.backProjectionOmpGroundRange_PoSAR_GB.argtypes = [
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # x
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # y
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # z
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    MyParametersPoSAR_GB ]
+
+    # backProjectionOmpGroundRange_PoSAR_GBalt
+    self.so.backProjectionOmpGroundRange_PoSAR_GBalt.argtypes = [
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # x
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # y
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # z
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    MyParametersPoSAR_GB ]
+
+    # backProjectionOmpGroundRange_PoSAR_GB_a
+    self.so.backProjectionOmpGroundRange_PoSAR_GB_a.argtypes = [
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # x
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # y
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # z
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    MyParametersPoSAR_GB ]
 
     # backProjectionOmpGroundRange_NED
     self.so.backProjectionOmpGroundRange_NED.argtypes = [
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     MyParameters,
     ctypeslib.ndpointer(c_double, ndim=1, flags='C') ]
@@ -104,7 +148,7 @@ class LibBackProjection(object):
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
-    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     MyParameters ]
 
@@ -153,16 +197,14 @@ class LibBackProjection(object):
 
     # pulse
     self.so.pulse.argtypes = [c_double]
-    self.so.interp.restype = c_double
 
     # interp
-    self.so.interp.argtypes = [
+    self.so.myInterp.argtypes = [
     c_double, 
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
     ctypeslib.ndpointer(complex, ndim=1, flags='C'), 
     c_double ]
-    
-    self.so.interp.restype = MyComplex
+    self.so.myInterp.restype = MyComplex
 
   def reload(self):
     _ctypes.dlclose(self.so._handle)
