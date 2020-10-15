@@ -43,12 +43,13 @@ class MyParameters_LETG(Structure):
     ('uxx', c_double),
     ('uxy', c_double),
     ('meanX', c_double),
-    ('meanY', c_double) ]
+    ('meanY', c_double),
+    ('kc', c_double)]
 
-class LibBackProjection(object):
+class Lib(object):
   """docstring for LibBackProjection"""
   def __init__(self, filename):
-    super(LibBackProjection, self).__init__()
+    super(Lib, self).__init__()
     self.filename = filename
     self.so = self.load()
     self.setArgTypesResType()
@@ -101,6 +102,17 @@ class LibBackProjection(object):
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(complex, ndim=1, flags='C'),
     MyParameters_LETG ]
 
+    # backProjectionOmpGroundRange_corr
+    self.so.backProjectionOmpGroundRange_corr.argtypes = [
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # x
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # y
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # z
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # r_over
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'), # sr
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex, ndim=1, flags='C'),  # img
+    MyParameters_LETG ]
+
     # backProjectionOmpGroundRange_PoSAR_GB
     self.so.backProjectionOmpGroundRange_PoSAR_GB.argtypes = [
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # x
@@ -123,6 +135,18 @@ class LibBackProjection(object):
 
     # backProjectionOmpGroundRange_PoSAR_GB_a
     self.so.backProjectionOmpGroundRange_PoSAR_GB_a.argtypes = [
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # x
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # y
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # z
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex,  ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(c_double, ndim=1, flags='C'),
+    ctypeslib.ndpointer(complex, ndim=1, flags='C'),
+    MyParametersPoSAR_GB ]
+
+    # backProjectionOmpGroundRange_PoSAR_GB_lha
+    self.so.backProjectionOmpGroundRange_PoSAR_GB_lha.argtypes = [
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # x
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # y
     ctypeslib.ndpointer(c_double, ndim=1, flags='C'), # z

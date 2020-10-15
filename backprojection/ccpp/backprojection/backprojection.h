@@ -59,6 +59,7 @@ typedef struct{
     double uxy;
     double meanX;
     double meanY;
+    double kc;
 } MyParameters_LETG;
 
 int backProjection(double *vec_x, int Nx,
@@ -101,6 +102,14 @@ int backProjectionOmpGroundRange_LETG(double* vec_x,
                                       double complex* sr,
                                       MyPosition *myPosition, double complex *img,
                                       MyParameters_LETG params);
+int backProjectionOmpGroundRange_corr(double* vec_x,
+                                      double* vec_y,
+                                      double* vec_z,
+                                      double* r_over,
+                                      double complex* sr,
+                                      MyPosition *myPosition, double* vel,
+                                      double complex *img,
+                                      MyParameters_LETG params);
 int backProjectionOmpGroundRange_PoSAR_GB(double* vec_x,
                                           double* vec_y,
                                           double* vec_z,
@@ -124,6 +133,15 @@ int backProjectionOmpGroundRange_PoSAR_GB_a(double* vec_x,
                                             MyPosition *positionTx,
                                             double complex *img,
                                             MyParametersPoSAR_GB params);
+int backProjectionOmpGroundRange_PoSAR_GB_lha(double* vec_x,
+                                              double* vec_y,
+                                              double* vec_z,
+                                              double* r_over,
+                                              double complex* sr,
+                                              MyPosition *positionRx,
+                                              MyPosition *positionTx,
+                                              double complex *img,
+                                              MyParametersPoSAR_GB params);
 int backProjectionOmpGroundRange_NED(double* vec_x,
                                      double* vec_r,
                                      double* r_over,

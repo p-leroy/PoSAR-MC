@@ -2,7 +2,7 @@ from osgeo import gdal
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.interpolate as interp
-from .epsgtools import *
+from epsgtools import *
 
 def loadDem( src_filename, withPlot=0 ):
 

@@ -32,6 +32,17 @@ track3_Long_0 = -1.99619
 track3_Lat_1  = 48.06007 
 track3_Long_1 = -2.02550
 
+concreteBlock0 = np.array([ 48.057693 , -2.008456, 0.0 ])
+
+concreteBlocks = np.array([
+    [48.058067999622324,-2.0065217857185120,0.0],
+    [48.057944804557310,-2.0071700279455684,0.0],
+    [48.057820013472934,-2.0078100100003486,0.0],
+    [48.057696817814474,-2.0084613762863315,0.0],
+    [48.057576395106054,-2.0090977078737673,0.0],
+    [48.057453198864690,-2.0097521982186746,0.0]
+    ])
+
 runaway = np.array([ [ 48.057546, -2.010483, 0.0 ],
 	[ 48.058403, -2.005964, 0.0 ],
 	[ 48.058191, -2.005869, 0.0 ],
@@ -52,15 +63,6 @@ building = np.array([ [ 48.056830, -2.007717, 0.0 ],
           [ 48.056754, -2.007706, 0.0 ],
           [ 48.056830, -2.007717, 0.0 ]
           ])
-
-concreteBlocks = np.array([
-    [48.058067999622324,-2.0065217857185120,0.0],
-    [48.057944804557310,-2.0071700279455684,0.0],
-    [48.057820013472934,-2.0078100100003486,0.0],
-    [48.057696817814474,-2.0084613762863315,0.0],
-    [48.057576395106054,-2.0090977078737673,0.0],
-    [48.057453198864690,-2.0097521982186746,0.0]
-    ])
 
 church = np.array( [48.066103, -1.978348, 82.27] )
 
@@ -142,39 +144,22 @@ def getLastLine( filename ):
             last = next(reader)
         print(last)
 
-def printUtc( index, utc ):
-    print( str(utc[index][1]) 
-          + " : " + str(utc[index][2]) 
-          + " : " + "{:.3f}".format(utc[index][3] + utc[index][4] * 1e-9) )
+def getInterpolatedGps(x, gps):
+    xp = gps.timestamps
+    Lat_interp = np.interp(x, xp, gps.lat)
+    Long_interp  = np.interp(x, xp, gps.long)
+    Alt_interp  = np.interp(x, xp, gps.alt)
+    return Lat_interp, Long_interp, Alt_interp
 
-def getDataAtIndex(filename, index):
-    with open(filename, newline='') as f:
-        reader = csv.reader(f)
-        for r in range(index+1):
-            next(reader)
-        val = next(reader)
-    return val
+def getInterpolatedVelCourse(x, vel):
+    xp = vel.timestamps
+    Vel_record = np.interp(x, xp, vel.vel)
+    course_record  = np.interp(x, xp, vel.course)
+    return Vel_record, course_record
 
-def getBlockNumber( t, t_0 ):
-    delta = getSeconds( t ) - getSeconds(t_0)
-    return int( np.floor( delta / T_files ) * blocksPerFile )
-
-def getUtcIndex( tod ):
-    return np.amax( np.where( utc_seconds <= getSeconds( tod ) ) )
-
-def getUtcData( logUtcData, timeOfDay ):
-    with open( logUtcData, newline='') as f:
-        reader = csv.reader(f)
-        next(reader)
-        utc = np.loadtxt( io.StringIO( next(reader)[0] ))
-        
-        while (utc[5] < timeOfDay[0] - hourOffset):
-            utc = np.loadtxt( io.StringIO( next(reader)[0] ))
-            
-        while (utc[6] < timeOfDay[1]):
-            utc = np.loadtxt( io.StringIO( next(reader)[0] ))
-            
-        while (utc[7] < timeOfDay[2]):
-            utc = np.loadtxt( io.StringIO( next(reader)[0] ))
-            
-    return utc
+def getInterpolatedVel(x, vel):
+    xp = vel.timestamps
+    velNorth_records = np.interp(x, xp, vel.north)
+    velEast_records  = np.interp(x, xp, vel.east)
+    velDown_records  = np.interp(x, xp, vel.down)
+    return velNorth_records, velEast_records, velDown_records
