@@ -13,7 +13,7 @@ class Record(object):
 		print(f"rec_dir {rec_dir}")
 		self.rec_dir = rec_dir
 		self.day_hour = rec_dir.split('/')[-1]
-		logger.info(f"\n\n - RECORD - {self.day_hour}\n")
+		logger.warning(f"RECORD {self.day_hour}")
 		y, m, d, h, mn, s = self.day_hour.split('_')
 		self.y = int(y)
 		self.m = int(m)

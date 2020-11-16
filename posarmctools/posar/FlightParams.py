@@ -56,7 +56,7 @@ class FlightParams(object):
                     hour = line.split(" ")[0]
                     start = line.split(" ")[1]
                     stop = line.split(" ")[2]
-                    logger.info("trajectory information detected, start {start}, stop {stop}")
+                    logger.info(f"trajectory information detected, start {start}, stop {stop}")
                 hours[hour] = (start, stop)
                 dirname = os.path.join(dir_posar, day, day + "_" + hour)
                 if not os.path.isdir(dirname):

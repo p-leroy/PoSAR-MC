@@ -34,10 +34,18 @@ class LogUtcData(Log):
 			for idx in [self.names.index(col) for col in ("year", "month", "day")]]
 
 	def printLoopbacksTimes(self, printer):
-		printer("start ... " + self.toStr(self.loopbacks[0]))
+		msg = "start ... " + self.toStr(self.loopbacks[0])
+		printer(msg)
+		logger.info(msg)
 		if len(self.loopbacks) > 2:
 			for loop, loopback in enumerate(self.loopbacks[1:-1]):
-				printer(f"loop {loop} ... " + self.toStr(loopback))
+				msg = f"loop {loop} ... " + self.toStr(loopback)
+				printer(msg)
+				logger.info(msg)
 		else:
-			printer("no loopback detected")
-		printer("stop ... " + self.toStr(self.loopbacks[-1] - 1))
+			msg = "no loopback detected"
+			printer(msg)
+			logger.info(msg)
+		msg = "stop ... " + self.toStr(self.loopbacks[-1] - 1)
+		printer(msg)
+		logger.info(msg)
